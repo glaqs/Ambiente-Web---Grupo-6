@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!--Parte de Elian Josue Salinas Montero-->
+  <meta charset="UTF-8">
+  <title>FINGO® - Gestión Financiera</title>
+  <style>
+    :root {
+      --midnight-blue: #41729F;
+      --blue-gray: #5885AF;
+      --dark-blue: #274472;
+      --baby-blue: #C3E0E5;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--baby-blue);
+    }
+
+    header {
+      background-color: var(--dark-blue);
+      color: white;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    header img {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--blue-gray);
+      object-fit: cover;
+    }
+
+    nav {
+      background-color: var(--midnight-blue);
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: var(--blue-gray);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      background-color: var(--dark-blue);
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    form input, form button {
+      display: block;
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--midnight-blue);
+      border-radius: 4px;
+    }
+
+    form button {
+      background-color: var(--midnight-blue);
+      color: white;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="image.png" alt="Logo FINGO">
+    <h1>FINGO®</h1>
+  </header>
+
+  <nav>
+    <button onclick="mostrarSeccion('login')">Inicio/Login</button>
+    <button onclick="mostrarSeccion('registro')">Registro</button>
+    <button onclick="mostrarSeccion('dashboard')">Dashboard</button>
+    <button onclick="mostrarSeccion('finanzas')">Finanzas</button>
+  </nav>
+
+  <main>
+
+    <div id="login">
+      <h2>Iniciar Sesión</h2>
+      <form>
+        <input type="email" placeholder="Correo electrónico" required>
+        <input type="password" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+
+    <div id="registro" class="hidden">
+      <h2>Registro de Usuario</h2>
+      <form>
+        <input type="text" placeholder="Nombre completo" required>
+        <input type="email" placeholder="Correo electrónico" required>
+        <input type="password" placeholder="Contraseña" required>
+        <input type="password" placeholder="Confirmar contraseña" required>
+        <button type="submit">Crear cuenta</button>
+      </form>
+    </div>
+
+    <div id="dashboard" class="hidden">
+      <h2>Panel de Usuario</h2>
+      <p>Bienvenido/a a tu panel. Desde aquí puedes acceder a todas las funciones de FINGO®.</p>
+    </div>
+
+    <div id="finanzas" class="hidden">
+      <section>
+        <h2>Registrar Ingreso</h2>
+        <form>
+          <input type="text" placeholder="Fuente de ingreso">
+          <input type="number" placeholder="Monto">
+          <input type="date">
+          <button type="submit">Guardar ingreso</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Registrar Gasto</h2>
+        <form>
+          <input type="text" placeholder="Categoría">
+          <input type="number" placeholder="Monto">
+          <input type="text" placeholder="Descripción">
+          <input type="date">
+          <button type="submit">Guardar gasto</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function mostrarSeccion(id) {
+      const secciones = ['login', 'registro', 'dashboard', 'finanzas'];
+      secciones.forEach(sec => {
+        document.getElementById(sec).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
+<!--Fin de la parte de Elian Josue Salinas Montero-->
