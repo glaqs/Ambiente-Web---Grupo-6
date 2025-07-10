@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <!--Parte de Elian Josue Salinas Montero-->
   <meta charset="UTF-8">
@@ -65,7 +66,8 @@
       margin-bottom: 30px;
     }
 
-    form input, form button {
+    form input,
+    form button {
       display: block;
       margin: 10px 0;
       padding: 8px;
@@ -86,6 +88,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -99,9 +102,28 @@
     <button onclick="mostrarSeccion('dashboard')">Dashboard</button>
     <button onclick="mostrarSeccion('finanzas')">Finanzas</button>
   </nav>
+  <div id="reportes" class="hidden">
+    <h2>Lista Reportes</h2>
+    <p>A continuación se mostraran los reportes de los gastos.</p>
+  </div>
+  <div id="usuario" class="hidden">
+    <h2>Editar Usuario</h2>
+    <form>
+      <input type="text" placeholder="Gael Alonso Gutierrez Delgado">
+      <input type="email" placeholder="ggutierrez00832@ufide.ac.cr">
+      <input type="password" placeholder="Cambiar Contraseña">
+      <input type="password" placeholder="Confirmar contraseña" required>
+      <button type="submit">Confirmar Cambios</button>
+    </form>
+  </div>
 
-    }
+  <div id="notificaciones" class="hidden">
+    <h2>Notificaciones Importantes</h2>
+    <p>En este panel se despliegan sus Notifiaciones Importantes y Alertas de gastos</p>
+  </div>
+
   </script>
 </body>
+
 </html>
 <!--Fin de la parte de Elian Josue Salinas Montero-->
