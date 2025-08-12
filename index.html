@@ -2,148 +2,90 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <title>FINGO® - Gestión Financiera</title>
-  <style>
-    :root {
-      --midnight-blue: #41729F;
-      --blue-gray: #5885AF;
-      --dark-blue: #274472;
-      --baby-blue: #C3E0E5;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--baby-blue);
-    }
-
-    header {
-      background-color: var(--dark-blue);
-      color: white;
-      padding: 15px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    header img {
-      height: 60px;
-      width: 60px;
-      border-radius: 50%;
-      border: 2px solid var(--blue-gray);
-      object-fit: cover;
-    }
-
-    nav {
-      background-color: var(--midnight-blue);
-      padding: 10px;
-      text-align: center;
-    }
-
-    nav button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: var(--blue-gray);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    nav button:hover {
-      background-color: var(--dark-blue);
-    }
-
-    main {
-      padding: 20px;
-    }
-
-    section {
-      margin-bottom: 30px;
-    }
-    form input,
-    form button {
-      display: block;
-      margin: 10px 0;
-      padding: 8px;
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid var(--midnight-blue);
-      border-radius: 4px;
-    }
-
-    form button {
-      background-color: var(--midnight-blue);
-      color: white;
-      font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>FINGO® - Gestión Financiera</title>
+    <link rel="stylesheet" href="estilos.css" />
+    <style>
+        
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
+    <header>
+        <img src="fingo mejorado.png" alt="Logo FINGO" />
+        <h1>FINGO®</h1>
+    </header>
 
-  <header>
-    <img src="image.png" alt="Logo FINGO">
-    <h1>FINGO®</h1>
-  </header>
+ <nav>
+    <a href="#" id="navLogin" onclick="mostrarSeccion('login'); return false;">Inicio/Login</a>
+    <a href="#" id="navRegistro" onclick="mostrarSeccion('registro'); return false;">Registro</a>
 
-  <nav>
-    <button onclick="mostrarSeccion('login')">Inicio/Login</button>
-    <button onclick="mostrarSeccion('registro')">Registro</button>
-    <button onclick="mostrarSeccion('dashboard')">Dashboard</button>
-    <button onclick="mostrarSeccion('finanzas')">Finanzas</button>
-  </nav>
-  <div id="reportes" class="hidden">
-    <h2>Lista Reportes</h2>
-    <p>A continuación se mostraran los reportes de los gastos.</p>
-  </div>
-  <div id="usuario" class="hidden">
-    <h2>Editar Usuario</h2>
-    <form>
-      <input type="text" placeholder="Gael Alonso Gutierrez Delgado">
-      <input type="email" placeholder="ggutierrez00832@ufide.ac.cr">
-      <input type="password" placeholder="Cambiar Contraseña">
-      <input type="password" placeholder="Confirmar contraseña" required>
-      <button type="submit">Confirmar Cambios</button>
-    </form>
-  </div>
+    <!-- Menú visible para todos (antes oculto) -->
+    <a href="#" class="nav-logged" onclick="mostrarSeccion('dashboard'); return false;">Dashboard</a>
+    <a href="#" class="nav-logged" onclick="mostrarSeccion('finanzas'); return false;">Finanzas</a>
+    <a href="#" class="nav-logged" onclick="mostrarSeccion('reportes'); return false;">Reportes</a>
+    <a href="#" class="nav-logged" onclick="mostrarSeccion('usuario'); return false;">Usuario</a>
+    <a href="#" class="nav-logged" onclick="mostrarSeccion('notificaciones'); return false;">Notificaciones</a>
+    <a href="#" class="nav-logged" onclick="mostrarSeccion('config'); return false;">Configuración</a>
+    <a href="#" id="logoutBtn" class="nav-logged" onclick="logout(); return false;">Cerrar sesión</a>
+</nav>
 
+    <main>
+        <div id="login">
+            <h2>Iniciar Sesión</h2>
+            <form id="formLogin">
+                <input type="email" name="email" placeholder="Correo electrónico" required />
+                <input type="password" name="password" placeholder="Contraseña" required />
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
 
-  <div id="notificaciones" class="hidden">
-    <h2>Notificaciones Importantes</h2>
-    <p>En este panel se despliegan sus Notifiaciones Importantes y Alertas de gastos</p>
-  </div>
+        <div id="registro" class="hidden">
+            <h2>Registro de Usuario</h2>
+            <form id="formRegistro">
+                <input type="text" name="nombre" placeholder="Nombre completo" required />
+                <input type="email" name="email" placeholder="Correo electrónico" required />
+                <input type="password" name="password" placeholder="Contraseña" required />
+                <input type="password" name="password_confirm" placeholder="Confirmar contraseña" required />
+                <button type="submit">Crear cuenta</button>
+            </form>
+        </div>
 
-    <div id= "config" class="config-section hidden">
-    <h2>Configuración de Fingo</h2>
-    <label for="CambioNoti">Notificaciones:</label>
-    <select id="CambioNoti">
-      <option value="on">Activadas</option>
-      <option value="off">Desactivadas</option>
-    </select>
-    <button type="submit">Guardar Configuración</button>
-    </div>
-   </main>
-   <script>
-  </script>
-  <footer style="
-  
-  text-align: center;
-  padding: 10px;
-  background-color: #C3E0E5;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-   font-weight: bold;
-">
-  GRUPO 6 &reg; DERECHOS RESERVADOS 2025
-</footer>
+        <!-- Todas estas secciones empiezan ocultas -->
+        <div id="dashboard" class="hidden">
+            <h2>Panel de Usuario</h2>
+            <p>Bienvenido/a a tu panel. Desde aquí puedes acceder a todas las funciones de FINGO®.</p>
+        </div>
+
+        <div id="finanzas" class="hidden">
+            <!-- contenido finanzas -->
+        </div>
+
+        <div id="reportes" class="hidden">
+            <!-- contenido reportes -->
+        </div>
+
+        <div id="usuario" class="hidden">
+            <!-- contenido usuario -->
+        </div>
+
+        <div id="notificaciones" class="hidden">
+            <!-- contenido notificaciones -->
+        </div>
+
+        <div id="config" class="hidden">
+            <!-- contenido configuración -->
+        </div>
+    </main>
+
+    <script src="script.js"></script>
 </body>
+
+<footer>
+    GRUPO 6 &reg; DERECHOS RESERVADOS 2025
+</footer>
+
 </html>
