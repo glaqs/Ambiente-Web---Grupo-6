@@ -16,7 +16,7 @@ $notificaciones = [
 
 $config = [
     ["Opción" => "Nombre de Usuario", "Valor" => "Gael"],
-    ["Opción" => "Correo Electrónico", "Valor" => "gaelgudel@gmail.com"],
+    ["Opción" => "Correo Electrónico", "Valor" => "Gaelgudel@gmail.com"],
     ["Opción" => "Moneda", "Valor" => "CRC"],
     ["Opción" => "Notificaciones", "Valor" => "Activadas"],
     ["Opción" => "Límite Diario", "Valor" => "₡100,000"]
@@ -201,8 +201,8 @@ $config = [
             <h2>Perfil de Usuario</h2>
             <?php
             $usuario = [
-                "Nombre" => "Juan",
-                "Correo" => "juan@aaa.com",
+                "Nombre" => "Gael",
+                "Correo" => "Gaelgudel@gmail.com",
             ];
             echo "<ul>";
             foreach ($usuario as $campo => $valor) {
