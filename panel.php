@@ -34,5 +34,4 @@ if (!isset($_SESSION['user_id'])) {
         }
     </script>
 </body>
-
 </html>
