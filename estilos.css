@@ -85,3 +85,54 @@ footer {
   margin-top: 240px;
   width: 100%;
 }
+#dashboard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+#dashboard h2 {
+  color: var(--midnight-blue);
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+#dashboard p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: var(--dark-blue);
+}
+
+#dashboard ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+#dashboard li {
+  background-color: var(--baby-blue);
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: var(--dark-blue);
+  transition: transform 0.2s, background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+#dashboard li:hover {
+  background-color: var(--blue-gray);
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.hidden {
+  display: none;
+}
+
+#dashboard ul {
+list-style: none; 
+padding-left: 0;
+margin: 20px 0;
+}

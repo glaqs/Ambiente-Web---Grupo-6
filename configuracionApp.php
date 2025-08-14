@@ -1,5 +1,4 @@
 <?php
-// Datos quemados de configuración
 $config = [
     ["Opción" => "Nombre de Usuario", "Valor" => "Gael"],
     ["Opción" => "Correo Electrónico", "Valor" => "gaelgudel@gmail.com"],
@@ -9,7 +8,7 @@ $config = [
 ];
 ?>
 
-<div id="config" class="hidden">
+<div id="config">
     <h2>Configuración de Fingo</h2>
     <ul>
         <?php foreach ($config as $c): ?>

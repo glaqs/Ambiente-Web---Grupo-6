@@ -1,4 +1,4 @@
-<div id="reportes" class="hidden">
+<div id="reportes">
     <h2>Reportes Financieros</h2>
     <?php
     $reportes = [
@@ -19,7 +19,7 @@
     ?>
 </div>
 
-<div id="usuario" class="hidden">
+<div id="usuario">
     <h2>Perfil de Usuario</h2>
     <?php
     $usuario = [
