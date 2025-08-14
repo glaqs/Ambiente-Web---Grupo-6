@@ -98,83 +98,41 @@ $config = [
         </div>
 
         <!-- Finanzas -->
-        <div id="finanzas" class="hidden">
-            <h2>Finanzas</h2>
-            <div class="tabla-finanzas">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo</th>
-                            <th>Concepto</th>
-                            <th>Monto (₡)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="ingreso">
-                            <td>01/08/2025</td>
-                            <td>Ingreso</td>
-                            <td>Proyecto freelance</td>
-                            <td>500,000</td>
-                        </tr>
-                        <tr class="gasto">
-                            <td>02/08/2025</td>
-                            <td>Gasto</td>
-                            <td>Supermercado</td>
-                            <td>120,000</td>
-                        </tr>
-                        <tr class="gasto">
-                            <td>03/08/2025</td>
-                            <td>Gasto</td>
-                            <td>Transporte</td>
-                            <td>75,000</td>
-                        </tr>
-                        <tr class="ingreso">
-                            <td>04/08/2025</td>
-                            <td>Ingreso</td>
-                            <td>Venta de productos</td>
-                            <td>300,000</td>
-                        </tr>
-                        <tr class="gasto">
-                            <td>05/08/2025</td>
-                            <td>Gasto</td>
-                            <td>Suscripción mensual</td>
-                            <td>50,000</td>
-                        </tr>
-                        <tr class="gasto">
-                            <td>06/08/2025</td>
-                            <td>Gasto</td>
-                            <td>Restaurante</td>
-                            <td>80,000</td>
-                        </tr>
-                        <tr class="ingreso">
-                            <td>07/08/2025</td>
-                            <td>Ingreso</td>
-                            <td>Reembolso cliente</td>
-                            <td>250,000</td>
-                        </tr>
-                        <tr class="gasto">
-                            <td>08/08/2025</td>
-                            <td>Gasto</td>
-                            <td>Servicios básicos</td>
-                            <td>90,000</td>
-                        </tr>
-                        <tr class="ingreso">
-                            <td>09/08/2025</td>
-                            <td>Ingreso</td>
-                            <td>Inversión devuelta</td>
-                            <td>400,000</td>
-                        </tr>
-                        <tr class="gasto">
-                            <td>10/08/2025</td>
-                            <td>Gasto</td>
-                            <td>Transporte adicional</td>
-                            <td>60,000</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+       <div id="finanzas" class="hidden">
+    <h2>Finanzas</h2>
+    <?php
+    $transacciones = [
+        ["Fecha" => "01/08/2025", "Tipo" => "Ingreso", "Concepto" => "Proyecto freelance", "Monto" => 500000],
+        ["Fecha" => "02/08/2025", "Tipo" => "Gasto", "Concepto" => "Supermercado", "Monto" => 120000],
+        ["Fecha" => "03/08/2025", "Tipo" => "Gasto", "Concepto" => "Transporte", "Monto" => 75000],
+        ["Fecha" => "04/08/2025", "Tipo" => "Ingreso", "Concepto" => "Venta de productos", "Monto" => 300000],
+        ["Fecha" => "05/08/2025", "Tipo" => "Gasto", "Concepto" => "Suscripción mensual", "Monto" => 50000],
+        ["Fecha" => "06/08/2025", "Tipo" => "Gasto", "Concepto" => "Restaurante", "Monto" => 80000],
+        ["Fecha" => "07/08/2025", "Tipo" => "Ingreso", "Concepto" => "Reembolso cliente", "Monto" => 250000],
+        ["Fecha" => "08/08/2025", "Tipo" => "Gasto", "Concepto" => "Servicios básicos", "Monto" => 90000],
+        ["Fecha" => "09/08/2025", "Tipo" => "Ingreso", "Concepto" => "Inversión devuelta", "Monto" => 400000],
+        ["Fecha" => "10/08/2025", "Tipo" => "Gasto", "Concepto" => "Transporte adicional", "Monto" => 60000],
+    ];
+
+    echo "<table border='1' cellpadding='5'>
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Concepto</th>
+                <th>Monto (₡)</th>
+            </tr>";
+    foreach ($transacciones as $t) {
+        echo "<tr>
+                <td>{$t['Fecha']}</td>
+                <td>{$t['Tipo']}</td>
+                <td>{$t['Concepto']}</td>
+                <td>₡" . number_format($t['Monto'], 0, ',', '.') . "</td>
+              </tr>";
+    }
+    echo "</table>";
+    ?>
+</div>
+
 
         <div id="reportes" class="hidden">
             <h2>Reportes Financieros</h2>
