@@ -1,26 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['user_id'])) {
-    header("Location: panel.php");
-    exit();
-}
-
-$notificaciones = [
-    "Has recibido ₡25,000 de Carlos Alvarado - 2025-08-10",
-    "Pago de ₡7,500 en Supermercado Palí - 2025-08-12",
-    "Recibiste un reembolso de ₡3,200 - 2025-08-13",
-    "Nuevo inicio de sesión desde un dispositivo - 2025-08-14",
-    "Meta de ahorro 'Vacaciones Guanacaste' alcanzó el 75% - 2025-08-14",
-    "Recibiste tu salario de ₡750,000 - 2025-08-15"
-];
-
-$config = [
-    ["Opción" => "Nombre de Usuario", "Valor" => "Gael"],
-    ["Opción" => "Correo Electrónico", "Valor" => "Gaelgudel@gmail.com"],
-    ["Opción" => "Moneda", "Valor" => "CRC"],
-    ["Opción" => "Notificaciones", "Valor" => "Activadas"],
-    ["Opción" => "Límite Diario", "Valor" => "₡100,000"]
-];
+include "config.php"; // Conexión DB
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -29,168 +9,158 @@ $config = [
     <meta charset="UTF-8">
     <title>FINGO® - Gestión Financiera</title>
     <link rel="stylesheet" href="estilos.css">
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 
-<body>
+<body <?php echo isset($_SESSION['user_id']) ? 'data-loggedin="true"' : ''; ?>>
+
     <header>
-        <img src="imagenes/fingo mejorado.png" alt="Logo FINGO">
+        <img src="fingo_mejorada.png" alt="Logo FINGO">
         <h1>FINGO®</h1>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="logout.php" class="logout-btn">Cerrar sesión</a>
+        <?php endif; ?>
     </header>
 
     <nav>
-        <a href="#" id="navLogin" onclick="mostrarSeccion('login'); return false;">Inicio/Login</a>
-        <a href="#" id="navRegistro" onclick="mostrarSeccion('registro'); return false;">Registro</a>
-
-        <!-- Menú solo visible si está logueado -->
-        <a href="#" class="nav-logged hidden" onclick="mostrarSeccion('dashboard'); return false;">Dashboard</a>
-        <a href="#" class="nav-logged hidden" onclick="mostrarSeccion('finanzas'); return false;">Finanzas</a>
-        <a href="#" class="nav-logged hidden" onclick="mostrarSeccion('reportes'); return false;">Reportes</a>
-        <a href="#" class="nav-logged hidden" onclick="mostrarSeccion('usuario'); return false;">Usuario</a>
-        <a href="#" class="nav-logged hidden" onclick="mostrarSeccion('notificaciones'); return false;">Notificaciones</a>
-        <a href="#" class="nav-logged hidden" onclick="mostrarSeccion('config'); return false;">Configuración</a>
-        <a href="#" id="logoutBtn" class="nav-logged hidden" onclick="logout(); return false;">Cerrar sesión</a>
+        <?php if (!isset($_SESSION['user_id'])): ?>
+            <button onclick="mostrarSeccion('login')">Inicio/Login</button>
+            <button onclick="mostrarSeccion('registro')">Registro</button>
+        <?php else: ?>
+            <button onclick="mostrarSeccion('dashboard')">Dashboard</button>
+            <button onclick="mostrarSeccion('finanzas')">Finanzas</button>
+            <button onclick="mostrarSeccion('reportes')">Reportes</button>
+            <button onclick="mostrarSeccion('usuario')">Usuario</button>
+            <button onclick="mostrarSeccion('notificaciones')">Notificaciones</button>
+            <button onclick="mostrarSeccion('config')">Configuración</button>
+        <?php endif; ?>
     </nav>
 
     <main>
-        <!-- Login -->
-        <div id="login">
+
+        <!-- LOGIN -->
+        <div id="login" class="<?php echo isset($_SESSION['user_id']) ? 'hidden' : ''; ?>">
             <h2>Iniciar Sesión</h2>
-            <form id="formLogin" method="POST">
+            <form action="login.php" method="POST">
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
                 <button type="submit">Entrar</button>
             </form>
         </div>
 
-        <!-- Registro -->
+        <!-- REGISTRO -->
         <div id="registro" class="hidden">
             <h2>Registro de Usuario</h2>
-            <form id="formRegistro" method="POST">
+            <form action="registro.php" method="POST">
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
-                <input type="password" name="password_confirm" placeholder="Confirmar contraseña" required>
+                <input type="password" name="confirmar_password" placeholder="Confirmar contraseña" required>
                 <button type="submit">Crear cuenta</button>
             </form>
         </div>
 
-        <!-- Dashboard -->
-        <div id="dashboard" class="hidden">
-            <div class="dashboard-info">
+        <?php if (isset($_SESSION['user_id'])): ?>
+
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="hidden">
                 <h2>Panel de Usuario</h2>
-                <p>Bienvenido/a a tu panel. Desde aquí puedes acceder a todas las funciones de <strong>FINGO®</strong>.</p>
-                <p>En este panel encontrarás:</p>
-                <ul>
-                    <p>Finanzas: Registra y consulta tus ingresos y gastos.</p>
-                    <p>Reportes: Visualiza reportes gráficos de tus finanzas.</p>
-                    <p>Usuario: Administra tu perfil y preferencias.</p>
-                    <p>Notificaciones: Recibe alertas importantes.</p>
-                    <p>Configuración: Personaliza la aplicación a tu gusto.</p>
-                    <br><br>
-                </ul>
-                <p><em>Consejo:</em> Explora cada módulo para aprovechar todas nuestras funcionalidades.</p>
+                <p>Bienvenido/a, <?php echo $_SESSION['nombre']; ?>!</p>
             </div>
-        </div>
 
-        <!-- Finanzas -->
-       <div id="finanzas" class="hidden">
-    <h2>Finanzas</h2>
-    <?php
-    $transacciones = [
-        ["Fecha" => "01/08/2025", "Tipo" => "Ingreso", "Concepto" => "Proyecto freelance", "Monto" => 500000],
-        ["Fecha" => "02/08/2025", "Tipo" => "Gasto", "Concepto" => "Supermercado", "Monto" => 120000],
-        ["Fecha" => "03/08/2025", "Tipo" => "Gasto", "Concepto" => "Transporte", "Monto" => 75000],
-        ["Fecha" => "04/08/2025", "Tipo" => "Ingreso", "Concepto" => "Venta de productos", "Monto" => 300000],
-        ["Fecha" => "05/08/2025", "Tipo" => "Gasto", "Concepto" => "Suscripción mensual", "Monto" => 50000],
-        ["Fecha" => "06/08/2025", "Tipo" => "Gasto", "Concepto" => "Restaurante", "Monto" => 80000],
-        ["Fecha" => "07/08/2025", "Tipo" => "Ingreso", "Concepto" => "Reembolso cliente", "Monto" => 250000],
-        ["Fecha" => "08/08/2025", "Tipo" => "Gasto", "Concepto" => "Servicios básicos", "Monto" => 90000],
-        ["Fecha" => "09/08/2025", "Tipo" => "Ingreso", "Concepto" => "Inversión devuelta", "Monto" => 400000],
-        ["Fecha" => "10/08/2025", "Tipo" => "Gasto", "Concepto" => "Transporte adicional", "Monto" => 60000],
-    ];
+            <!-- FINANZAS -->
+            <div id="finanzas" class="hidden">
+                <section>
+                    <h2>Registrar Ingreso</h2>
+                    <form action="finanzas.php" method="POST">
+                        <input type="hidden" name="tipo" value="ingreso">
+                        <input type="text" name="descripcion" placeholder="Fuente de ingreso">
+                        <input type="number" name="monto" placeholder="Monto">
+                        <input type="date" name="fecha">
+                        <button type="submit">Guardar ingreso</button>
+                    </form>
+                </section>
 
-    echo "<table border='1' cellpadding='5'>
-            <tr>
-                <th>Fecha</th>
-                <th>Tipo</th>
-                <th>Concepto</th>
-                <th>Monto (₡)</th>
-            </tr>";
-    foreach ($transacciones as $t) {
-        echo "<tr>
-                <td>{$t['Fecha']}</td>
-                <td>{$t['Tipo']}</td>
-                <td>{$t['Concepto']}</td>
-                <td>₡" . number_format($t['Monto'], 0, ',', '.') . "</td>
-              </tr>";
-    }
-    echo "</table>";
-    ?>
-</div>
+                <section>
+                    <h2>Registrar Gasto</h2>
+                    <form action="finanzas.php" method="POST">
+                        <input type="hidden" name="tipo" value="gasto">
+                        <input type="text" name="descripcion" placeholder="Categoría">
+                        <input type="number" name="monto" placeholder="Monto">
+                        <input type="date" name="fecha">
+                        <button type="submit">Guardar gasto</button>
+                    </form>
+                </section>
+            </div>
 
+            <!-- REPORTES -->
+            <div id="reportes" class="hidden">
+                <h2>Lista de Reportes</h2>
+                <?php
+                $sql = "SELECT * FROM finanzas WHERE user_id=? ORDER BY fecha DESC";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $_SESSION['user_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($result->num_rows > 0):
+                ?>
+                    <table border="1" style="width:100%; margin-top:20px;">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                        </tr>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo $row['tipo']; ?></td>
+                                <td><?php echo $row['descripcion']; ?></td>
+                                <td><?php echo $row['monto']; ?></td>
+                                <td><?php echo $row['fecha']; ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </table>
+                <?php else: ?>
+                    <p>No hay registros aún.</p>
+                <?php endif; ?>
+            </div>
 
-        <div id="reportes" class="hidden">
-            <h2>Reportes Financieros</h2>
-            <?php
-            $reportes = [
-                ["Fecha" => "2025-01-15", "Tipo" => "Ingreso", "Monto" => 1500, "Descripción" => "Pago de cliente"],
-                ["Fecha" => "2025-01-20", "Tipo" => "Gasto", "Monto" => 450, "Descripción" => "Compra de insumos"],
-                ["Fecha" => "2025-02-01", "Tipo" => "Ingreso", "Monto" => 2000, "Descripción" => "Venta de producto"]
-            ];
-            echo "<table border='1' cellpadding='5'><tr><th>Fecha</th><th>Tipo</th><th>Monto</th><th>Descripción</th></tr>";
-            foreach ($reportes as $r) {
-                echo "<tr>
-                        <td>{$r['Fecha']}</td>
-                        <td>{$r['Tipo']}</td>
-                        <td>₡" . number_format($r['Monto'], 2) . "</td>
-                        <td>{$r['Descripción']}</td>
-                      </tr>";
-            }
-            echo "</table>";
-            ?>
-        </div>
+            <!-- USUARIO -->
+            <div id="usuario" class="hidden">
+                <h2>Editar Usuario</h2>
+                <form action="usuario.php" method="POST">
+                    <input type="text" name="nombre" placeholder="Nombre completo" value="<?php echo $_SESSION['nombre']; ?>">
+                    <input type="email" name="email" placeholder="Correo electrónico">
+                    <input type="password" name="password" placeholder="Nueva contraseña">
+                    <button type="submit">Actualizar datos</button>
+                </form>
+            </div>
 
-        <div id="usuario" class="hidden">
-            <h2>Perfil de Usuario</h2>
-            <?php
-            $usuario = [
-                "Nombre" => "Gael",
-                "Correo" => "Gaelgudel@gmail.com",
-            ];
-            echo "<ul>";
-            foreach ($usuario as $campo => $valor) {
-                echo "<li><strong>$campo:</strong> $valor</li>";
-            }
-            echo "</ul>";
-            ?>
- </div>
-        <!-- Notificaciones -->
-        <div id="notificaciones" class="hidden">
-            <h2>Notificaciones</h2>
-            <ul>
-                <?php foreach ($notificaciones as $notif): ?>
-                    <p><?php echo $notif; ?></p>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+            <!-- NOTIFICACIONES -->
+            <div id="notificaciones" class="hidden">
+                <h2>Notificaciones</h2>
+                <p>Aquí se mostrarán alertas importantes sobre tus finanzas.</p>
+            </div>
 
-        <!-- Configuración -->
-        <div id="config" class="hidden">
-            <h2>Configuración</h2>
-            <ul>
-                <?php foreach ($config as $c): ?>
-                    <p><strong><?php echo $c['Opción']; ?>:</strong> <?php echo $c['Valor']; ?></p>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+            <!-- CONFIGURACIÓN -->
+            <div id="config" class="hidden">
+                <h2>Configuración</h2>
+                <form action="configuracion.php" method="POST">
+                    <label for="CambioNoti">Notificaciones:</label>
+                    <select id="CambioNoti" name="notificaciones">
+                        <option value="on">Activadas</option>
+                        <option value="off">Desactivadas</option>
+                    </select>
+                    <button type="submit">Guardar Configuración</button>
+                </form>
+            </div>
+
+        <?php endif; ?>
+
     </main>
 
-    <footer>GRUPO 6 &reg; DERECHOS RESERVADOS 2025</footer>
+    <footer>
+        GRUPO 6 &reg; DERECHOS RESERVADOS 2025
+    </footer>
 
     <script src="script.js"></script>
 </body>
