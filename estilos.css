@@ -5,16 +5,21 @@
     --baby-blue: #C3E0E5;
 }
 
-body {
-    font-family: Arial, sans-serif;
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
     background-color: var(--baby-blue);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Header */
 header {
     background-color: var(--dark-blue);
     color: white;
@@ -32,6 +37,26 @@ header img {
     object-fit: cover;
 }
 
+header h1 {
+    font-size: 1.8rem;
+}
+
+.logout-btn {
+    margin-left: auto;
+    padding: 8px 15px;
+    background-color: var(--midnight-blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+/* Navegación */
 nav {
     background-color: var(--midnight-blue);
     padding: 10px;
@@ -47,23 +72,28 @@ nav button {
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 nav button:hover {
     background-color: var(--dark-blue);
 }
 
+/* Main */
 main {
     padding: 20px;
     flex: 1;
 }
 
+/* Secciones */
 section {
     margin-bottom: 30px;
 }
 
+/* Formularios */
 form input,
-form button {
+form button,
+form select {
     display: block;
     margin: 10px 0;
     padding: 8px;
@@ -77,15 +107,59 @@ form button {
     background-color: var(--midnight-blue);
     color: white;
     font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: var(--dark-blue);
 }
 
 .hidden {
     display: none;
 }
 
+/* Footer */
 footer {
     text-align: center;
     padding: 10px;
     background-color: var(--baby-blue);
     font-weight: bold;
+}
+
+/* Tablas de reportes */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid var(--midnight-blue);
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: var(--blue-gray);
+    color: white;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    nav button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    form input,
+    form button,
+    form select {
+        max-width: 100%;
+    }
 }

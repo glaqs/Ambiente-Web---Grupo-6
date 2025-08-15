@@ -2,19 +2,35 @@
 session_start();
 include "config.php";
 
-if (!isset($_SESSION['user_id'])) die("No autorizado");
+if (!isset($_SESSION['user_id'])) {
+    echo "<script>alert('Debes iniciar sesión'); window.location.href='index.php';</script>";
+    exit;
+}
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $tipo = $_POST['tipo']; // ingreso o gasto
-    $monto = $_POST['monto'];
-    $descripcion = $_POST['descripcion'];
-    $fecha = $_POST['fecha'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $tipo = trim($_POST['tipo']); // 'ingreso' o 'gasto'
+    $descripcion = trim($_POST['descripcion']);
+    $monto = trim($_POST['monto']);
+    $fecha = trim($_POST['fecha']);
+    $user_id = $_SESSION['user_id'];
 
-    // Insertar en finanzas automáticamente
-    $sql = "INSERT INTO finanzas (user_id,tipo,monto,descripcion,fecha) VALUES (?,?,?,?,?)";
+    // Validar campos
+    if (empty($tipo) || empty($descripcion) || empty($monto) || empty($fecha)) {
+        echo "<script>alert('Por favor complete todos los campos'); window.history.back();</script>";
+        exit;
+    }
+
+    // Insertar en la base de datos
+    $sql = "INSERT INTO finanzas (user_id, tipo, descripcion, monto, fecha) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isiss", $_SESSION['user_id'], $tipo, $monto, $descripcion, $fecha);
-    $stmt->execute();
+    if (!$stmt) {
+        die("Error al preparar la consulta: " . $conn->error);
+    }
+    $stmt->bind_param("issds", $user_id, $tipo, $descripcion, $monto, $fecha);
 
-    header("Location: index.php");
+    if ($stmt->execute()) {
+        echo "<script>alert('Datos ingresados correctamente'); window.location.href='index.php#finanzas';</script>";
+    } else {
+        echo "<script>alert('Error al guardar los datos'); window.history.back();</script>";
+    }
 }

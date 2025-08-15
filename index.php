@@ -14,7 +14,7 @@ include "config.php"; // Conexión DB
 <body <?php echo isset($_SESSION['user_id']) ? 'data-loggedin="true"' : ''; ?>>
 
     <header>
-        <img src="fingo_mejorada.png" alt="Logo FINGO">
+        <img src="imagenes/fingo_mejorada.png" alt="Logo FINGO">
         <h1>FINGO®</h1>
         <?php if (isset($_SESSION['user_id'])): ?>
             <a href="logout.php" class="logout-btn">Cerrar sesión</a>
@@ -101,8 +101,9 @@ include "config.php"; // Conexión DB
                 $stmt->bind_param("i", $_SESSION['user_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                if ($result->num_rows > 0):
+                $saldo = 0;
                 ?>
+                <?php if ($result->num_rows > 0): ?>
                     <table border="1" style="width:100%; margin-top:20px;">
                         <tr>
                             <th>Tipo</th>
@@ -117,8 +118,26 @@ include "config.php"; // Conexión DB
                                 <td><?php echo $row['monto']; ?></td>
                                 <td><?php echo $row['fecha']; ?></td>
                             </tr>
+                            <?php
+                            if ($row['tipo'] == 'ingreso') $saldo += $row['monto'];
+                            else $saldo -= $row['monto'];
+                            ?>
                         <?php endwhile; ?>
                     </table>
+                    <p><strong>Saldo actual: <?php echo $saldo; ?> ₡</strong></p>
+
+                    <!-- Botones de envío -->
+                    <form action="enviar_reporte.php" method="POST">
+                        <button type="submit">Enviar reporte por correo</button>
+                    </form>
+                    <?php
+                    $mensaje_wa = urlencode("Reporte de finanzas FINGO®\nSaldo actual: $saldo ₡");
+                    $telefono = '+50670491152';
+                    ?>
+                    <a href="https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>" target="_blank">
+                        Enviar reporte por WhatsApp
+                    </a>
+
                 <?php else: ?>
                     <p>No hay registros aún.</p>
                 <?php endif; ?>
