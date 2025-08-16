@@ -1,0 +1,212 @@
+:root {
+    --midnight-blue: #41729F;
+    --blue-gray: #5885AF;
+    --dark-blue: #274472;
+    --baby-blue: #C3E0E5;
+    --green-whatsapp: #25d366;
+    --red-alert: #d9534f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--baby-blue);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    background-color: var(--dark-blue);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--blue-gray);
+    object-fit: cover;
+}
+
+header h1 {
+    font-size: 1.8rem;
+}
+
+.logout-btn {
+    margin-left: auto;
+    padding: 8px 15px;
+    background-color: var(--midnight-blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+/* Navegación */
+nav {
+    background-color: var(--midnight-blue);
+    padding: 10px;
+    text-align: center;
+}
+
+nav button {
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: var(--blue-gray);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+nav button:hover {
+    background-color: var(--dark-blue);
+}
+
+/* Main */
+main {
+    padding: 20px;
+    flex: 1;
+}
+
+/* Secciones */
+section {
+    margin-bottom: 30px;
+}
+
+/* Formularios */
+form input,
+form button,
+form select {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--midnight-blue);
+    border-radius: 4px;
+}
+
+form button {
+    background-color: var(--midnight-blue);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: var(--dark-blue);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: var(--baby-blue);
+    font-weight: bold;
+}
+
+/* Tablas de reportes y notificaciones */
+table.movimientos {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.movimientos th,
+table.movimientos td {
+    border: 1px solid var(--midnight-blue);
+    padding: 8px;
+}
+
+table.movimientos th {
+    background-color: var(--blue-gray);
+    color: white;
+}
+
+table.movimientos td {
+    background-color: #C3E0E5;
+}
+
+/* Botones de acciones */
+.acciones-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 90%;
+    margin: 15px auto;
+}
+
+.btn-accion {
+    flex: 1;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-correo {
+    background-color: var(--midnight-blue);
+}
+
+.btn-whatsapp {
+    background-color: var(--green-whatsapp);
+}
+
+.btn-limpiar {
+    background-color: var(--red-alert);
+}
+
+.btn-accion:hover {
+    opacity: 0.9;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    nav button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    form input,
+    form button,
+    form select {
+        max-width: 100%;
+    }
+
+    .acciones-container {
+        flex-direction: column;
+    }
+}
