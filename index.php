@@ -64,9 +64,46 @@ include "config.php"; // Conexión DB
 
             <!-- DASHBOARD -->
             <div id="dashboard">
-                <h2>Panel de Usuario</h2>
-                <p>Bienvenido/a, <?php echo $_SESSION['nombre'] ?? 'Usuario'; ?>!</p>
+                <h1>Panel de Usuario</h1>
+                <br>
+                <p style="font-size: 1.5rem; font-weight: bold; text-align: center;">
+                    Bienvenido/a, <?php echo $_SESSION['nombre'] ?? 'Usuario'; ?>!
+                </p>
+
+                <div style="position: relative; width: 100%; text-align: center; margin-top: 50px;">
+                    <!-- Texto arqueado sobre las imágenes -->
+                    <svg width="100%" height="150" viewBox="0 0 1000 150" style="position: absolute; top: 0; left: 0;">
+                        <defs>
+                            <path id="arco" d="M 50,120 Q 500,-30 950,120" />
+                        </defs>
+                        <text fill="#036501" font-size="28" font-weight="bold">
+                            <textPath href="#arco" text-anchor="middle" startOffset="50%">
+                                FINGO®: Finanzas Inteligentes de Gestión Organizada
+                            </textPath>
+                        </text>
+                    </svg>
+                    <br><br><br><br>
+                    <!-- Imágenes del logo -->
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 35px; margin-top: 60px;">
+                        <img src="imagenes/fingo_mejorado.png" alt="Logo FINGO" style="height: 300px; width: auto;">
+                        <img src="imagenes/FINGO.png" alt="Logo FINGO" style="height: 300px; width: auto;">
+                    </div>
+                </div>
+
+
+                <!-- Contenedor de eslóganes debajo de las imágenes -->
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="font-size: 1.8rem; font-weight: bold; color: #0a0a0aff; margin: 10px 0;">
+                        Haz que cada colón cuente
+                    </p>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #02029dff; margin: 10px 0;">
+                        Cuida tus finanzas
+                    </p>
+                </div>
+
             </div>
+
+
 
             <!-- FINANZAS -->
             <div id="finanzas" class="hidden">
@@ -143,19 +180,49 @@ include "config.php"; // Conexión DB
                     $telefono = $_SESSION['telefono'];
                     ?>
 
-                    <div style="display:flex; justify-content:space-between; margin-top:15px; gap:10px;">
-                        <form action="enviar_reporte.php" method="POST" style="flex:1;">
-                            <input type="hidden" name="mensaje" value="<?php echo htmlspecialchars("Saldo actual: ₡$saldo"); ?>">
-                            <button type="submit" style="width:100%; padding:10px; font-weight:bold; background-color:#41729F; color:white; border:none; border-radius:5px;">
-                                Enviar reporte por correo
-                            </button>
-                        </form>
+                    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px; align-items: center;">
+                        <!-- Botón de correo - Contenedor con ancho fijo -->
+                        <div style="width: 160px;">
+                            <form action="enviar_reporte.php" method="POST" style="margin: 0;">
+                                <input type="hidden" name="mensaje" value="<?php echo htmlspecialchars("Saldo actual: ₡$saldo"); ?>">
+                                <button type="submit" style="
+                width: 100%;
+                background-color: #007AFF;
+                color: white;
+                border: none;
+                padding: 12px 0;
+                font-size: 0.95em;
+                font-weight: 500;
+                border-radius: 6px;
+                cursor: pointer;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                line-height: 1.2;
+            ">
+                                    Enviar por correo
+                                </button>
+                            </form>
+                        </div>
 
-                        <a href="https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>" target="_blank"
-                            style="flex:1; display:flex; justify-content:center; align-items:center; padding:10px; font-weight:bold; background-color:#25d366; color:white; text-decoration:none; border-radius:5px;">
-                            Enviar alerta por WhatsApp
-                        </a>
+                        <!-- Botón WhatsApp - Contenedor con mismo ancho fijo -->
+                        <div style="width: 160px;">
+                            <button type="button" style="
+            width: 100%;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            font-size: 0.95em;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            line-height: 1.2;
+        " onclick="window.open('https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>','_blank')">
+                                Enviar por WhatsApp
+                            </button>
+                        </div>
                     </div>
+
                 <?php else: ?>
                     <p style="text-align:center;">No hay registros aún.</p>
                 <?php endif; ?>
@@ -221,48 +288,78 @@ include "config.php"; // Conexión DB
 
                     <?php if ($saldo <= $umbral_alerta): ?>
                         <p style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
-                            ¡ALERTA! Tu saldo ha bajado al 10% de tus ingresos totales. Saldo actual: ₡<?php echo $saldo; ?>
+                            ¡ALERTA! Tu disponibilidad ha alcanzado el 10% o menos de tus ingresos. Saldo actual: ₡<?php echo $saldo; ?>
                         </p>
                     <?php endif; ?>
+                    <br>
+                    <h1 style="text-align: center; ">"CUIDA TUS GASTOS"</h1>
 
                     <?php
                     $mensaje_alerta_web = "Hola {$_SESSION['nombre']}, este es un recordatorio de tus finanzas. Saldo actual: ₡$saldo.";
-                    $mensaje_alerta_wa = "¡Alerta FINGO®! Tu saldo actual es ₡$saldo. Tu disponibilidad ha alcanzado el 10% de tus ingresos.";
+                    $mensaje_alerta_wa = "¡Alerta FINGO®! Tu saldo actual es ₡$saldo. Tu disponibilidad ha alcanzado el 10% o menos de tus ingresos.";
                     $mensaje_wa = urlencode($mensaje_alerta_wa);
                     ?>
 
-                    <div style="display:flex; justify-content:space-between; margin-top:15px; gap:10px;">
-                        <form action="enviar_reporte.php" method="POST" style="flex:1;">
-                            <input type="hidden" name="mensaje" value="<?php echo htmlspecialchars($mensaje_alerta_web); ?>">
-                            <button type="submit" style="width:100%; padding:10px; font-weight:bold; background-color:#41729F; color:white; border:none; border-radius:5px;">
-                                Enviar reporte por correo
+                    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px; align-items: center;">
+                        <!-- Botón de correo - Contenedor con ancho fijo -->
+                        <div style="width: 160px;">
+                            <form action="enviar_reporte.php" method="POST" style="margin: 0;">
+                                <input type="hidden" name="mensaje" value="<?php echo htmlspecialchars("Saldo actual: ₡$saldo"); ?>">
+                                <button type="submit" style="
+                width: 100%;
+                background-color: #007AFF;
+                color: white;
+                border: none;
+                padding: 12px 0;
+                font-size: 0.95em;
+                font-weight: 500;
+                border-radius: 6px;
+                cursor: pointer;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                line-height: 1.2;
+            ">
+                                    Enviar por correo
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Botón WhatsApp - Contenedor con mismo ancho fijo -->
+                        <div style="width: 160px;">
+                            <button type="button" style="
+            width: 100%;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            font-size: 0.95em;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            line-height: 1.2;
+        " onclick="window.open('https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>','_blank')">
+                                Enviar por WhatsApp
                             </button>
-                        </form>
-
-                        <a href="https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>" target="_blank"
-                            style="flex:1; display:flex; justify-content:center; align-items:center; padding:10px; font-weight:bold; background-color:#25d366; color:white; text-decoration:none; border-radius:5px;">
-                            Enviar alerta por WhatsApp
-                        </a>
+                        </div>
+                    <?php else: ?>
+                        <p style="text-align:center;">No hay movimientos registrados aún.</p>
+                    <?php endif; ?>
                     </div>
-                <?php else: ?>
-                    <p style="text-align:center;">No hay movimientos registrados aún.</p>
+
+                    <!-- CONFIGURACIÓN -->
+                    <div id="config" class="hidden">
+                        <h2>Configuración</h2>
+                        <form action="configuracion.php" method="POST">
+                            <label for="CambioNoti">Notificaciones:</label>
+                            <select id="CambioNoti" name="notificaciones">
+                                <option value="on">Activadas</option>
+                                <option value="off">Desactivadas</option>
+                            </select>
+                            <button type="submit">Guardar Configuración</button>
+                        </form>
+                    </div>
+
                 <?php endif; ?>
-            </div>
-
-            <!-- CONFIGURACIÓN -->
-            <div id="config" class="hidden">
-                <h2>Configuración</h2>
-                <form action="configuracion.php" method="POST">
-                    <label for="CambioNoti">Notificaciones:</label>
-                    <select id="CambioNoti" name="notificaciones">
-                        <option value="on">Activadas</option>
-                        <option value="off">Desactivadas</option>
-                    </select>
-                    <button type="submit">Guardar Configuración</button>
-                </form>
-            </div>
-
-        <?php endif; ?>
 
     </main>
 
