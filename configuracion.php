@@ -2,7 +2,7 @@
 session_start();
 include "config.php";
 
-if(isset($_SESSION['user_id']) && isset($_POST['notificaciones'])) {
+if (isset($_SESSION['user_id']) && isset($_POST['notificaciones'])) {
     $noti = $_POST['notificaciones'];
 
     $sql = "UPDATE usuarios SET notificaciones=? WHERE id=?";
@@ -15,4 +15,3 @@ if(isset($_SESSION['user_id']) && isset($_POST['notificaciones'])) {
 
 header("Location: index.php"); // Regresa al index
 exit();
-?>

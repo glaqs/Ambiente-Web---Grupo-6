@@ -6,7 +6,6 @@ include "config.php"; // Conexión a la base de datos
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Ajusta esta ruta según donde tengas PHPMailer en tu proyecto
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
@@ -53,8 +52,8 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'proyectov3web@gmail.com'; // Tu correo Gmail
-    $mail->Password = 'mgakybwtvetjnjpi'; // Tu contraseña de aplicación sin espacios
+    $mail->Username = 'proyectov3web@gmail.com'; // Correo Gmail
+    $mail->Password = 'mgakybwtvetjnjpi'; // Contraseña de aplicación sin espacios
     $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
 
