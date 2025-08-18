@@ -24,10 +24,10 @@ include "config.php"; // Conexión DB
     <nav>
         <?php if (!isset($_SESSION['user_id'])): ?>
             <button onclick="mostrarSeccion('login')">Inicio/Login</button>
-            <button onclick="mostrarSeccion('registro')">Registro</button>
+            <button onclick="mostrarSeccion('registrarse')">Registrarse</button>
         <?php else: ?>
             <button onclick="mostrarSeccion('dashboard')">Dashboard</button>
-            <button onclick="mostrarSeccion('calculadora')">Calculadora de Tipo de ambio</button>
+            <button onclick="mostrarSeccion('calculadora')">Calculadora de Tipo de Cambio</button>
             <button onclick="mostrarSeccion('finanzas')">Finanzas</button>
             <button onclick="mostrarSeccion('reportes')">Reportes</button>
             <button onclick="mostrarSeccion('usuario')">Usuario</button>
@@ -48,7 +48,7 @@ include "config.php"; // Conexión DB
         </div>
 
         <!-- REGISTRO -->
-        <div id="registro" class="hidden">
+        <div id="registrarse" class="hidden">
             <h2>Registro de Usuario</h2>
             <form action="registro.php" method="POST">
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
@@ -56,12 +56,11 @@ include "config.php"; // Conexión DB
                 <input type="password" name="password" placeholder="Contraseña" required>
                 <input type="password" name="confirmar_password" placeholder="Confirmar contraseña" required>
                 <input type="text" name="telefono" placeholder="Número de teléfono" required>
-                <button type="submit">Crear cuenta</button>
+                <button type="submit" name="registro">Registrarse</button>
             </form>
         </div>
 
         <?php if (isset($_SESSION['user_id'])): ?>
-
             <!-- DASHBOARD -->
             <div id="dashboard">
                 <br>
@@ -373,102 +372,105 @@ include "config.php"; // Conexión DB
                     <button type="submit">Guardar Configuración</button>
                 </form>
             </div>
-
-            <script>
-                // Función para mostrar una sección y ocultar las demás
-                function mostrarSeccion(id) {
-                    const secciones = ['login', 'registro', 'dashboard', 'calculadora', 'finanzas', 'reportes', 'usuario', 'notificaciones', 'config'];
-                    secciones.forEach(sec => {
-                        const el = document.getElementById(sec);
-                        if (el) el.classList.add('hidden');
-                    });
-                    const mostrar = document.getElementById(id);
-                    if (mostrar) mostrar.classList.remove('hidden');
-                }
-
-                // Configurar la calculadora
-                document.addEventListener('DOMContentLoaded', function() {
-                    const formCambio = document.getElementById('form-cambio');
-                    if (formCambio) {
-                        formCambio.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            convertirMoneda();
-                        });
-
-                        document.getElementById('intercambiar').addEventListener('click', function() {
-                            const origen = document.getElementById('moneda-origen');
-                            const destino = document.getElementById('moneda-destino');
-                            const temp = origen.value;
-                            origen.value = destino.value;
-                            destino.value = temp;
-                        });
-                    }
-
-                    // Mostrar sección inicial según estado de login
-                    const userLoggedIn = document.body.getAttribute('data-loggedin');
-                    if (!userLoggedIn) {
-                        mostrarSeccion('login');
-                    } else {
-                        mostrarSeccion('dashboard');
-                    }
-                });
-
-                // Función para convertir moneda usando API
-                async function convertirMoneda() {
-                    const monto = document.getElementById('monto').value;
-                    const monedaOrigen = document.getElementById('moneda-origen').value;
-                    const monedaDestino = document.getElementById('moneda-destino').value;
-
-                    // Ocultar resultados anteriores
-                    document.getElementById('resultado-cambio').style.display = 'none';
-                    document.getElementById('error-cambio').style.display = 'none';
-
-                    // Mostrar estado de carga
-                    const boton = document.querySelector('#form-cambio button[type="submit"]');
-                    const textoOriginal = boton.textContent;
-                    boton.textContent = 'Calculando...';
-                    boton.disabled = true;
-
-                    try {
-                        // Llamada a la API de tipo de cambio (reemplaza API_KEY con tu clave real)
-                        const response = await fetch(`https://v6.exchangerate-api.com/v6/f834c5836910464dfad9f714/latest/${monedaOrigen}`);
-                        const data = await response.json();
-
-                        if (data.result === 'success' && data.conversion_rates[monedaDestino]) {
-                            const tasa = data.conversion_rates[monedaDestino];
-                            const resultado = (monto * tasa).toFixed(2);
-
-                            // Mostrar resultados
-                            document.getElementById('resultado-texto').textContent =
-                                `${monto} ${monedaOrigen} = ${resultado} ${monedaDestino}`;
-                            document.getElementById('tasa-cambio').textContent =
-                                `1 ${monedaOrigen} = ${tasa.toFixed(6)} ${monedaDestino}`;
-                            document.getElementById('ultima-actualizacion').textContent =
-                                `Tasas actualizadas: ${new Date(data.time_last_update_utc).toLocaleDateString()}`;
-
-                            document.getElementById('resultado-cambio').style.display = 'block';
-                        } else {
-                            throw new Error(data['error-type'] || 'No se pudo obtener la tasa de cambio');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        document.getElementById('error-cambio').textContent =
-                            'Error al conectar con el servicio de tasas de cambio. Intente nuevamente más tarde.';
-                        document.getElementById('error-cambio').style.display = 'block';
-                    } finally {
-                        boton.textContent = textoOriginal;
-                        boton.disabled = false;
-                    }
-                }
-            </script>
-
         <?php endif; ?>
-
     </main>
 
     <footer>
         GRUPO 6 &reg; DERECHOS RESERVADOS 2025
     </footer>
+
+    <script>
+        // Función para mostrar/ocultar secciones
+        function mostrarSeccion(id) {
+            const secciones = ['login', 'registrarse', 'dashboard', 'calculadora',
+                'finanzas', 'reportes', 'usuario', 'notificaciones', 'config'
+            ];
+
+            secciones.forEach(sec => {
+                const el = document.getElementById(sec);
+                if (el) el.classList.add('hidden');
+            });
+
+            const mostrar = document.getElementById(id);
+            if (mostrar) mostrar.classList.remove('hidden');
+        }
+
+        // Configuración inicial al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const userLoggedIn = document.body.getAttribute('data-loggedin') === 'true';
+
+            if (!userLoggedIn) {
+                mostrarSeccion('login');
+            } else {
+                mostrarSeccion('dashboard');
+            }
+
+            // Configuración de la calculadora de tipo de cambio
+            const formCambio = document.getElementById('form-cambio');
+            if (formCambio) {
+                formCambio.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    convertirMoneda();
+                });
+
+                document.getElementById('intercambiar').addEventListener('click', function() {
+                    const origen = document.getElementById('moneda-origen');
+                    const destino = document.getElementById('moneda-destino');
+                    const temp = origen.value;
+                    origen.value = destino.value;
+                    destino.value = temp;
+                });
+            }
+        });
+
+        // Función para convertir moneda
+        async function convertirMoneda() {
+            const monto = document.getElementById('monto').value;
+            const monedaOrigen = document.getElementById('moneda-origen').value;
+            const monedaDestino = document.getElementById('moneda-destino').value;
+
+            // Ocultar resultados anteriores
+            document.getElementById('resultado-cambio').style.display = 'none';
+            document.getElementById('error-cambio').style.display = 'none';
+
+            // Mostrar estado de carga
+            const boton = document.querySelector('#form-cambio button[type="submit"]');
+            const textoOriginal = boton.textContent;
+            boton.textContent = 'Calculando...';
+            boton.disabled = true;
+
+            try {
+                // Llamada al API de tipo de cambio
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/f834c5836910464dfad9f714/latest/${monedaOrigen}`);
+                const data = await response.json();
+
+                if (data.result === 'success' && data.conversion_rates[monedaDestino]) {
+                    const tasa = data.conversion_rates[monedaDestino];
+                    const resultado = (monto * tasa).toFixed(2);
+
+                    // Mostrar resultados
+                    document.getElementById('resultado-texto').textContent =
+                        `${monto} ${monedaOrigen} = ${resultado} ${monedaDestino}`;
+                    document.getElementById('tasa-cambio').textContent =
+                        `1 ${monedaOrigen} = ${tasa.toFixed(6)} ${monedaDestino}`;
+                    document.getElementById('ultima-actualizacion').textContent =
+                        `Tasas actualizadas: ${new Date(data.time_last_update_utc).toLocaleDateString()}`;
+
+                    document.getElementById('resultado-cambio').style.display = 'block';
+                } else {
+                    throw new Error(data['error-type'] || 'No se pudo obtener la tasa de cambio');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('error-cambio').textContent =
+                    'Error al conectar con el servicio de tasas de cambio. Intente nuevamente más tarde.';
+                document.getElementById('error-cambio').style.display = 'block';
+            } finally {
+                boton.textContent = textoOriginal;
+                boton.disabled = false;
+            }
+        }
+    </script>
 </body>
 
 </html>

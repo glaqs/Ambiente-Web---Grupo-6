@@ -1,27 +1,41 @@
 // Función para mostrar una sección y ocultar las demás
 function mostrarSeccion(id) {
+    // Lista de todas las secciones posibles
     const secciones = ['login', 'registro', 'dashboard', 'finanzas', 'reportes', 'usuario', 'notificaciones', 'config'];
+
     secciones.forEach(sec => {
-        const el = document.getElementById(sec);
-        if (el) el.classList.add('hidden'); // Oculta todas
+        const elemento = document.getElementById(sec);
+        if (elemento) {
+            elemento.classList.add('hidden'); // Oculta todas las secciones
+        }
     });
-    const mostrar = document.getElementById(id);
-    if (mostrar) mostrar.classList.remove('hidden'); // Muestra la seleccionada
+
+    // Muestra solo la sección solicitada
+    const seccionAMostrar = document.getElementById(id);
+    if (seccionAMostrar) {
+        seccionAMostrar.classList.remove('hidden');
+    } else {
+        console.error(`No se encontró la sección con ID: ${id}`);
+    }
 }
 
-// Detecta si el usuario no ha iniciado sesión y oculta secciones
+// Control de visibilidad según el estado de sesión
 document.addEventListener('DOMContentLoaded', () => {
-    // Solo login y registro son visibles si no hay sesión
-    const userLoggedIn = document.body.getAttribute('data-loggedin'); // atributo que agregamos desde PHP
+    // Verifica si el usuario ha iniciado sesión (atributo data-loggedin)
+    const userLoggedIn = document.body.getAttribute('data-loggedin') === 'true';
 
     if (!userLoggedIn) {
-        const secciones = ['dashboard', 'finanzas', 'reportes', 'usuario', 'notificaciones', 'config'];
-        secciones.forEach(sec => {
-            const el = document.getElementById(sec);
-            if (el) el.classList.add('hidden');
+        // Oculta secciones que requieren autenticación
+        const seccionesProtegidas = ['dashboard', 'finanzas', 'reportes', 'usuario', 'notificaciones', 'config'];
+        seccionesProtegidas.forEach(sec => {
+            const elemento = document.getElementById(sec);
+            if (elemento) elemento.classList.add('hidden');
         });
-        // Mostrar login por defecto
+
+        // Muestra el formulario de login por defecto
         mostrarSeccion('login');
+    } else {
+        // Si está logueado, muestra el dashboard por defecto
+        mostrarSeccion('dashboard');
     }
 });
-
