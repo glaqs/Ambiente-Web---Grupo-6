@@ -27,6 +27,7 @@ include "config.php"; // Conexión DB
             <button onclick="mostrarSeccion('registro')">Registro</button>
         <?php else: ?>
             <button onclick="mostrarSeccion('dashboard')">Dashboard</button>
+            <button onclick="mostrarSeccion('calculadora')">Calculadora de Tipo de ambio</button>
             <button onclick="mostrarSeccion('finanzas')">Finanzas</button>
             <button onclick="mostrarSeccion('reportes')">Reportes</button>
             <button onclick="mostrarSeccion('usuario')">Usuario</button>
@@ -36,7 +37,6 @@ include "config.php"; // Conexión DB
     </nav>
 
     <main>
-
         <!-- LOGIN -->
         <div id="login" class="<?php echo isset($_SESSION['user_id']) ? 'hidden' : ''; ?>">
             <h2>Iniciar Sesión</h2>
@@ -64,14 +64,12 @@ include "config.php"; // Conexión DB
 
             <!-- DASHBOARD -->
             <div id="dashboard">
-                
                 <br>
                 <p style="font-size: 1.5rem; font-weight: bold; text-align: center;">
                     Bienvenido/a, <?php echo $_SESSION['nombre'] ?? 'Usuario'; ?>!
                 </p>
 
                 <div style="position: relative; width: 100%; text-align: center; margin-top: 50px;">
-                    <!-- Texto arqueado -->
                     <svg width="100%" height="150" viewBox="0 0 1000 150" style="position: absolute; top: 0; left: 0;">
                         <defs>
                             <path id="arco" d="M 50,120 Q 500,-30 950,120" />
@@ -83,27 +81,87 @@ include "config.php"; // Conexión DB
                         </text>
                     </svg>
                     <br><br><br><br>
-                    <!-- Imágenes del logo -->
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 35px; margin-top: 60px;">
-                        <img src="imagenes/fingo_mejorado.png" alt="Logo FINGO" style="height: 300px; width: auto;">
-                        <img src="imagenes/FINGO.png" alt="Logo FINGO" style="height: 300px; width: auto;">
+                    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 0; margin-top: 60px;">
+                        <img src="imagenes/fingo_mejorado.png"
+                            alt="Logo FINGO"
+                            style="height: 300px; width: auto; transform: rotate(-10deg); transform-origin: bottom right;">
+
+                        <img src="imagenes/FINGO.png"
+                            alt="Logo FINGO"
+                            style="height: 300px; width: auto; transform: rotate(10deg); transform-origin: bottom left;">
                     </div>
                 </div>
 
-
-                <!-- Contenedor de eslóganes -->
                 <div style="text-align: center; margin-top: 20px;">
-                    <p style="font-size: 1.8rem; font-weight: bold; color: #c025d1ff; margin: 10px 0;">
-                        Haz que cada colón cuente
-                    </p>
-                    <p style="font-size: 1.5rem; font-weight: bold; color: #02029dff; margin: 10px 0;">
+                    <svg width="500" height="150" viewBox="0 0 500 150">
+                        <path id="curva" d="M 50 120 Q 250 20 450 120" fill="transparent" />
+                        <text font-size="28" font-weight="bold" fill="#e600ffff">
+                            <textPath href="#curva" startOffset="50%" text-anchor="middle">
+                                Haz que cada colón cuente
+                            </textPath>
+                        </text>
+                    </svg>
+                    <br><br>
+                    <p style="font-size: 3rem; font-weight: bold; color: #02029dff; margin: 10px 0;">
                         Cuida tus finanzas
                     </p>
                 </div>
-
             </div>
 
+            <!-- CALCULADORA DE TIPO DE CAMBIO -->
+            <div id="calculadora" class="hidden">
+                <h2 style="text-align:center;">Calculadora de Tipo de Cambio</h2>
 
+                <div style="max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e45fc7ff; border-radius: 8px;">
+                    <form id="form-cambio" style="margin-bottom: 20px;">
+                        <div style="margin-bottom: 15px;">
+                            <label for="monto" style="display: block; margin-bottom: 5px;">Monto:</label>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <div style="flex: 1;">
+                                <label for="moneda-origen" style="display: block; margin-bottom: 5px;">De:</label>
+                                <select id="moneda-origen" name="moneda_origen" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                                    <option value="CRC">Colón Costarricense (CRC)</option>
+                                    <option value="USD">Dólar Estadounidense (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                    <option value="GBP">Libra Esterlina (GBP)</option>
+                                    <option value="MXN">Peso Mexicano (MXN)</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; align-items: center; padding-top: 22px;">
+                                <button type="button" id="intercambiar" style="background: none; border: none; cursor: pointer; font-size: 20px;">⇄</button>
+                            </div>
+
+                            <div style="flex: 1;">
+                                <label for="moneda-destino" style="display: block; margin-bottom: 5px;">A:</label>
+                                <select id="moneda-destino" name="moneda_destino" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                                    <option value="USD">Dólar Estadounidense (USD)</option>
+                                    <option value="CRC">Colón Costarricense (CRC)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                    <option value="GBP">Libra Esterlina (GBP)</option>
+                                    <option value="MXN">Peso Mexicano (MXN)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" style=" margin: 0 auto; width: 25%; padding: 10px; background-color: #fa0000ff; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: background-color 0.3s;">
+                            Calcular
+                        </button>
+                    </form>
+
+                    <div id="resultado-cambio" style="display: none; padding: 15px; background-color: #fdfdfdff; border-radius: 4px; text-align: center;">
+                        <h3 style="margin-top: 0;">Resultado:</h3>
+                        <p id="resultado-texto" style="font-size: 18px; font-weight: bold;"></p>
+                        <p id="tasa-cambio" style="font-size: 14px; color: #666;"></p>
+                        <p id="ultima-actualizacion" style="font-size: 12px; color: #999;"></p>
+                    </div>
+
+                    <div id="error-cambio" style="display: none; padding: 15px; background-color: #f8d7da; color: #721c24; border-radius: 4px; text-align: center;"></div>
+                </div>
+            </div>
 
             <!-- FINANZAS -->
             <div id="finanzas" class="hidden">
@@ -181,43 +239,17 @@ include "config.php"; // Conexión DB
                     ?>
 
                     <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px; align-items: center;">
-                        <!-- Botón de correo -->
                         <div style="width: 160px;">
                             <form action="enviar_reporte.php" method="POST" style="margin: 0;">
                                 <input type="hidden" name="mensaje" value="<?php echo htmlspecialchars("Saldo actual: ₡$saldo"); ?>">
-                                <button type="submit" style="
-                width: 100%;
-                background-color: #007AFF;
-                color: white;
-                border: none;
-                padding: 12px 0;
-                font-size: 0.95em;
-                font-weight: 500;
-                border-radius: 6px;
-                cursor: pointer;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                line-height: 1.2;
-            ">
+                                <button type="submit" style="width: 100%; background-color: #007AFF; color: white; border: none; padding: 12px 0; font-size: 0.95em; font-weight: 500; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); line-height: 1.2;">
                                     Enviar por correo
                                 </button>
                             </form>
                         </div>
 
-                        <!-- Botón WhatsApp -->
                         <div style="width: 160px;">
-                            <button type="button" style="
-            width: 100%;
-            background-color: #25D366;
-            color: white;
-            border: none;
-            padding: 12px 0;
-            font-size: 0.95em;
-            font-weight: 500;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            line-height: 1.2;
-        " onclick="window.open('https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>','_blank')">
+                            <button type="button" style="width: 100%; background-color: #25D366; color: white; border: none; padding: 12px 0; font-size: 0.95em; font-weight: 500; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); line-height: 1.2;" onclick="window.open('https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>','_blank')">
                                 Enviar por WhatsApp
                             </button>
                         </div>
@@ -286,12 +318,10 @@ include "config.php"; // Conexión DB
                         <?php endforeach; ?>
                     </table>
 
-                    <!-- Notificación normal -->
                     <p style="color:black; text-align:center; margin-top:10px;">
                         Saldo actual: ₡<?php echo $saldo; ?>
                     </p>
 
-                    <!-- Notificación de alerta -->
                     <?php if ($saldo <= $umbral_alerta): ?>
                         <p style="color:red; font-weight:bold; text-align:center; margin-top:10px;">
                             ¡ALERTA! Tu saldo (₡<?php echo $saldo; ?>) es igual o menor al 10% de tus ingresos totales (₡<?php echo $total_ingresos; ?>)
@@ -309,44 +339,18 @@ include "config.php"; // Conexión DB
                     ?>
 
                     <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px; align-items: center;">
-                        
-                    <!-- Botón de correo -->
+
                         <div style="width: 160px;">
                             <form action="enviar_reporte.php" method="POST" style="margin: 0;">
                                 <input type="hidden" name="mensaje" value="<?php echo htmlspecialchars("Saldo actual: ₡$saldo"); ?>">
-                                <button type="submit" style="
-                        width: 100%;
-                        background-color: #007AFF;
-                        color: white;
-                        border: none;
-                        padding: 12px 0;
-                        font-size: 0.95em;
-                        font-weight: 500;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                        line-height: 1.2;
-                    ">
+                                <button type="submit" style="width: 100%; background-color: #007AFF; color: white; border: none; padding: 12px 0; font-size: 0.95em; font-weight: 500; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); line-height: 1.2;">
                                     Enviar por correo
                                 </button>
                             </form>
                         </div>
 
-                        <!-- Botón WhatsApp -->
                         <div style="width: 160px;">
-                            <button type="button" style="
-                    width: 100%;
-                    background-color: #25D366;
-                    color: white;
-                    border: none;
-                    padding: 12px 0;
-                    font-size: 0.95em;
-                    font-weight: 500;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                    line-height: 1.2;
-                " onclick="window.open('https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>','_blank')">
+                            <button type="button" style="width: 100%; background-color: #25D366; color: white; border: none; padding: 12px 0; font-size: 0.95em; font-weight: 500; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); line-height: 1.2;" onclick="window.open('https://wa.me/<?php echo $telefono; ?>?text=<?php echo $mensaje_wa; ?>','_blank')">
                                 Enviar por WhatsApp
                             </button>
                         </div>
@@ -370,6 +374,94 @@ include "config.php"; // Conexión DB
                 </form>
             </div>
 
+            <script>
+                // Función para mostrar una sección y ocultar las demás
+                function mostrarSeccion(id) {
+                    const secciones = ['login', 'registro', 'dashboard', 'calculadora', 'finanzas', 'reportes', 'usuario', 'notificaciones', 'config'];
+                    secciones.forEach(sec => {
+                        const el = document.getElementById(sec);
+                        if (el) el.classList.add('hidden');
+                    });
+                    const mostrar = document.getElementById(id);
+                    if (mostrar) mostrar.classList.remove('hidden');
+                }
+
+                // Configurar la calculadora
+                document.addEventListener('DOMContentLoaded', function() {
+                    const formCambio = document.getElementById('form-cambio');
+                    if (formCambio) {
+                        formCambio.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            convertirMoneda();
+                        });
+
+                        document.getElementById('intercambiar').addEventListener('click', function() {
+                            const origen = document.getElementById('moneda-origen');
+                            const destino = document.getElementById('moneda-destino');
+                            const temp = origen.value;
+                            origen.value = destino.value;
+                            destino.value = temp;
+                        });
+                    }
+
+                    // Mostrar sección inicial según estado de login
+                    const userLoggedIn = document.body.getAttribute('data-loggedin');
+                    if (!userLoggedIn) {
+                        mostrarSeccion('login');
+                    } else {
+                        mostrarSeccion('dashboard');
+                    }
+                });
+
+                // Función para convertir moneda usando API
+                async function convertirMoneda() {
+                    const monto = document.getElementById('monto').value;
+                    const monedaOrigen = document.getElementById('moneda-origen').value;
+                    const monedaDestino = document.getElementById('moneda-destino').value;
+
+                    // Ocultar resultados anteriores
+                    document.getElementById('resultado-cambio').style.display = 'none';
+                    document.getElementById('error-cambio').style.display = 'none';
+
+                    // Mostrar estado de carga
+                    const boton = document.querySelector('#form-cambio button[type="submit"]');
+                    const textoOriginal = boton.textContent;
+                    boton.textContent = 'Calculando...';
+                    boton.disabled = true;
+
+                    try {
+                        // Llamada a la API de tipo de cambio (reemplaza API_KEY con tu clave real)
+                        const response = await fetch(`https://v6.exchangerate-api.com/v6/f834c5836910464dfad9f714/latest/${monedaOrigen}`);
+                        const data = await response.json();
+
+                        if (data.result === 'success' && data.conversion_rates[monedaDestino]) {
+                            const tasa = data.conversion_rates[monedaDestino];
+                            const resultado = (monto * tasa).toFixed(2);
+
+                            // Mostrar resultados
+                            document.getElementById('resultado-texto').textContent =
+                                `${monto} ${monedaOrigen} = ${resultado} ${monedaDestino}`;
+                            document.getElementById('tasa-cambio').textContent =
+                                `1 ${monedaOrigen} = ${tasa.toFixed(6)} ${monedaDestino}`;
+                            document.getElementById('ultima-actualizacion').textContent =
+                                `Tasas actualizadas: ${new Date(data.time_last_update_utc).toLocaleDateString()}`;
+
+                            document.getElementById('resultado-cambio').style.display = 'block';
+                        } else {
+                            throw new Error(data['error-type'] || 'No se pudo obtener la tasa de cambio');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        document.getElementById('error-cambio').textContent =
+                            'Error al conectar con el servicio de tasas de cambio. Intente nuevamente más tarde.';
+                        document.getElementById('error-cambio').style.display = 'block';
+                    } finally {
+                        boton.textContent = textoOriginal;
+                        boton.disabled = false;
+                    }
+                }
+            </script>
+
         <?php endif; ?>
 
     </main>
@@ -377,8 +469,6 @@ include "config.php"; // Conexión DB
     <footer>
         GRUPO 6 &reg; DERECHOS RESERVADOS 2025
     </footer>
-
-    <script src="script.js"></script>
 </body>
 
 </html>

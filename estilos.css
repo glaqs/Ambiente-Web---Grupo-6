@@ -135,21 +135,59 @@ table.movimientos {
     margin: 20px auto;
     border-collapse: collapse;
     text-align: center;
+    table-layout: auto; 
 }
 
 table.movimientos th,
 table.movimientos td {
     border: 1px solid var(--midnight-blue);
     padding: 8px;
+    white-space: nowrap; 
 }
 
 table.movimientos th {
     background-color: var(--blue-gray);
     color: white;
+    position: sticky;
+    top: 0; 
 }
 
 table.movimientos td {
     background-color: #C3E0E5;
+}
+
+/* Contenedor para la tabla con scroll vertical */
+.tabla-contenedor {
+    max-height: 70vh; 
+    overflow-y: auto;
+    margin: 20px auto;
+    width: 90%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Estilos para la paginación */
+.paginacion {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.paginacion a {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: var(--blue-gray);
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.paginacion a:hover {
+    background-color: var(--midnight-blue);
+}
+
+.paginacion .activa {
+    background-color: var(--midnight-blue);
+    font-weight: bold;
 }
 
 /* Botones de acciones */
