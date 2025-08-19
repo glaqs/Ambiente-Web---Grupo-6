@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['nombre'] = $row['nombre'];
             $_SESSION['telefono'] = $row['telefono'];
-            $_SESSION['email'] = $email; // ← Guardamos el email también
+            $_SESSION['email'] = $email; // ← Guardamos el email 
 
             // Redirigir al dashboard
             header("Location: index.php?seccion=dashboard");

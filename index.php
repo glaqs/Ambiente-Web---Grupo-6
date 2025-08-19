@@ -65,7 +65,7 @@ include "config.php"; // Conexión DB
             <div id="dashboard">
                 <br>
                 <p style="font-size: 1.5rem; font-weight: bold; text-align: center;">
-                    Bienvenido/a, <?php echo $_SESSION['nombre'] ?? 'Usuario'; ?>!
+                     👋Bienvenido/a, <?php echo $_SESSION['nombre']??'Usuario'; ?>!👋
                 </p>
 
                 <div style="position: relative; width: 100%; text-align: center; margin-top: 50px;">
@@ -94,15 +94,15 @@ include "config.php"; // Conexión DB
                 <div style="text-align: center; margin-top: 20px;">
                     <svg width="500" height="150" viewBox="0 0 500 150">
                         <path id="curva" d="M 50 120 Q 250 20 450 120" fill="transparent" />
-                        <text font-size="28" font-weight="bold" fill="#e600ffff">
+                        <text font-size="28" font-weight="bold" fill="#e600ff">
                             <textPath href="#curva" startOffset="50%" text-anchor="middle">
-                                Haz que cada colón cuente
+                                ¡¡Haz que cada colón cuente!!
                             </textPath>
                         </text>
                     </svg>
-                    <br><br>
+
                     <p style="font-size: 3rem; font-weight: bold; color: #02029dff; margin: 10px 0;">
-                        Cuida tus finanzas
+                        👉Cuida tus finanzas👈
                     </p>
                 </div>
             </div>
@@ -262,6 +262,7 @@ include "config.php"; // Conexión DB
             <!-- USUARIO -->
             <div id="usuario" class="hidden">
                 <h2>Editar Usuario</h2>
+                <!-- Formulario para actualizar -->
                 <form action="usuario.php" method="POST">
                     <input type="text" name="nombre" placeholder="Nombre completo" value="<?php echo $_SESSION['nombre'] ?? ''; ?>">
                     <input type="email" name="email" placeholder="Correo electrónico" value="<?php echo $_SESSION['email'] ?? ''; ?>">
@@ -269,7 +270,17 @@ include "config.php"; // Conexión DB
                     <input type="password" name="password" placeholder="Nueva contraseña">
                     <button type="submit">Actualizar datos</button>
                 </form>
+
+                <hr>
+
+                <!-- Formulario para eliminar -->
+                <form action="eliminar_usuario.php" method="POST" onsubmit="return confirm('⚠️ ¿Seguro que deseas eliminar tu cuenta? Esta acción es.');">
+                    <button type="submit" name="eliminar" style="background:red; color:white; padding:8px 12px; border:none; border-radius:6px; cursor:pointer;">
+                        Eliminar usuario
+                    </button>
+                </form>
             </div>
+
 
             <!-- NOTIFICACIONES -->
             <div id="notificaciones" class="hidden">

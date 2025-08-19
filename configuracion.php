@@ -10,7 +10,14 @@ if (isset($_SESSION['user_id']) && isset($_POST['notificaciones'])) {
     $stmt->bind_param("si", $noti, $_SESSION['user_id']);
     $stmt->execute();
 
-    $_SESSION['mensaje'] = "Configuración guardada correctamente";
+    // Mensaje según el estado de las notificaciones
+    if ($noti == '1' || $noti == 'activadas') {
+        $_SESSION['mensaje'] = "✅ Notificaciones activadas";
+    } else {
+        $_SESSION['mensaje'] = "🔕 Notificaciones desactivadas";
+    }
+    
+    $_SESSION['tipo_mensaje'] = "exito"; 
 }
 
 header("Location: index.php"); // Regresa al index
