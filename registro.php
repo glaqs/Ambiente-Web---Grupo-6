@@ -7,11 +7,11 @@ error_reporting(E_ALL);
 include "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nombre = trim($_POST['nombre']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
+    $nombre     = trim($_POST['nombre']);
+    $email      = trim($_POST['email']);
+    $password   = $_POST['password'];
     $confirmar_password = $_POST['confirmar_password'];
-    $telefono = trim($_POST['telefono']);
+    $telefono   = trim($_POST['telefono']);
 
     // Validar que las contraseñas coincidan
     if ($password !== $confirmar_password) {
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Hashear la contraseña
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Preparar la consulta de inserción
+    // Insertar usuario
     $sql = "INSERT INTO usuarios (nombre, email, password, telefono) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
@@ -44,8 +44,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     $stmt->bind_param("ssss", $nombre, $email, $password_hash, $telefono);
 
-    // Ejecutar y redirigir si es exitoso
     if ($stmt->execute()) {
+        // Guardar datos en la sesión
+        $_SESSION['user_id']  = $stmt->insert_id;
+        $_SESSION['nombre']   = $nombre;
+        $_SESSION['email']    = $email;
+        $_SESSION['telefono'] = $telefono;
+
         echo "<script>alert('Registro exitoso'); window.location.href='index.php';</script>";
         exit;
     } else {

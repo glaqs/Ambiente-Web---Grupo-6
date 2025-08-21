@@ -41,6 +41,17 @@ include "config.php"; // Conexión DB
         <div id="login" class="<?php echo isset($_SESSION['user_id']) ? 'hidden' : ''; ?>">
             <h2>Iniciar Sesión</h2>
 
+            <!-- Mostrar mensaje de error -->
+            <?php
+            if (isset($_GET['error'])) {
+                if ($_GET['error'] === 'invalid_password') {
+                    echo "<p style='color:red;'>Contraseña inválida</p>";
+                } elseif ($_GET['error'] === 'user_not_found') {
+                    echo "<p style='color:red;'>Usuario no encontrado</p>";
+                }
+            }
+            ?>
+
             <form action="login.php" method="POST">
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
@@ -53,6 +64,12 @@ include "config.php"; // Conexión DB
             <h2>Registro de Usuario</h2>
             <br>
             <div class="password-requirements">
+                <h5>Requisitos de la contraseña:</h5>
+                <ul>
+                    <h5>1. Debe contener mínimo 8 caracteres</h5>
+                    <h5>2. Al menos que una letra mayúscula</h5>
+                    <h5>3. Al menos un número</h5>
+                </ul>
                 <h3>Requisitos de la contraseña:</h3>
                 <p><small>1. Debe tener mínimo 8 caracteres.</small></p>
                 <p><small>2. Debe incluir al menos una letra mayúscula.</small></p>
@@ -82,6 +99,7 @@ include "config.php"; // Conexión DB
                 } else if ($_GET['registro_error'] == 2) {
                     echo 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.';
                 } else if ($_GET['registro_error'] == 3) {
+                    echo 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.';
                     echo 'La contraseña no cumple con los requisitos.';
                 } else if ($_GET['registro_error'] == 4) {
                     echo 'Error en la base de datos. Por favor, contacta al administrador.';
@@ -112,6 +130,7 @@ include "config.php"; // Conexión DB
                 // Verificar que las contraseñas coincidan
                 if (password !== confirmarPassword) {
                     e.preventDefault();
+                    alert('Las contraseñas no coinciden. Por favor, verifica.');
                     alert('Las contraseñas no coinciden. Por favor, verifique e intente de nuevo.');
                     return;
                 }
@@ -120,6 +139,7 @@ include "config.php"; // Conexión DB
                 const strongRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
                 if (!strongRegex.test(password)) {
                     e.preventDefault();
+                    alert('La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.');
                     alert('La contraseña no cumple con los requisitos.');
                 }
             });
@@ -331,14 +351,20 @@ include "config.php"; // Conexión DB
                 <?php endif; ?>
             </div>
 
-            <!-- USUARIO -->
-            <div id="usuario" class="hidden">
+            <?php
+            if (!isset($_SESSION['user_id'])) {
+                echo "<p style='text-align:center; color:red;'>⚠️ Debes iniciar sesión para editar tu usuario.</p>";
+                return;
+            }
+            ?>
+
+            <div id="usuario">
                 <h2>Editar Usuario</h2>
                 <!-- Formulario para actualizar -->
                 <form action="usuario.php" method="POST">
-                    <input type="text" name="nombre" placeholder="Nombre completo" value="<?php echo $_SESSION['nombre'] ?? ''; ?>">
-                    <input type="email" name="email" placeholder="Correo electrónico" value="<?php echo $_SESSION['email'] ?? ''; ?>">
-                    <input type="text" name="telefono" placeholder="Número de teléfono" value="<?php echo $_SESSION['telefono'] ?? ''; ?>">
+                    <input type="text" name="nombre" placeholder="Nombre completo" value="<?php echo htmlspecialchars($_SESSION['nombre']); ?>">
+                    <input type="email" name="email" placeholder="Correo electrónico" value="<?php echo htmlspecialchars($_SESSION['email']); ?>">
+                    <input type="text" name="telefono" placeholder="Número de teléfono" value="<?php echo htmlspecialchars($_SESSION['telefono']); ?>">
                     <input type="password" name="password" placeholder="Nueva contraseña">
                     <button type="submit">Actualizar datos</button>
                 </form>
@@ -346,7 +372,7 @@ include "config.php"; // Conexión DB
                 <hr>
 
                 <!-- Formulario para eliminar -->
-                <form action="eliminar_usuario.php" method="POST" onsubmit="return confirm('⚠️ ¿Seguro que deseas eliminar tu cuenta? Esta acción es.');">
+                <form action="eliminar_usuario.php" method="POST" onsubmit="return confirm('⚠️ ¿Seguro que deseas eliminar tu cuenta? Esta acción es irreversible.');">
                     <button type="submit" name="eliminar" style="background:red; color:white; padding:8px 12px; border:none; border-radius:6px; cursor:pointer;">
                         Eliminar usuario
                     </button>
