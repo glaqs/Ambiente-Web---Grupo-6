@@ -16,15 +16,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($resultado->num_rows > 0) {
             $usuario = $resultado->fetch_assoc();
 
-            // Verificar contraseña
-            if (password_verify($password, $usuario['clave'])) {
+            // Verificar contraseña usando la columna correcta
+            if (password_verify($password, $usuario['password'])) {
                 // Login correcto
                 $_SESSION['user_id'] = $usuario['id']; // Guardar id del usuario en sesión
                 $_SESSION['nombre'] = $usuario['nombre'];
 
                 echo "<script>
                     alert('✅ Bienvenido {$usuario['nombre']}');
-                    window.location.href = 'dashboard.php';
+                    window.location.href = 'index.php';
                 </script>";
                 exit();
             } else {
@@ -39,14 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Usuario no encontrado
             echo "<script>
                 alert('⚠️ Usuario no encontrado');
-                window.location.href = 'login.php';
+                window.location.href = 'index.php';
             </script>";
             exit();
         }
     } else {
         echo "<script>
             alert('⚠️ Debes llenar todos los campos');
-            window.location.href = 'login.php';
+            window.location.href = 'index.php';
         </script>";
         exit();
     }
