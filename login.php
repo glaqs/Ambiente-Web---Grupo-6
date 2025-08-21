@@ -1,39 +1,55 @@
 <?php
 session_start();
-include "config.php"; // Conexión a la base de datos
+include "config.php"; // Conexion a B.D.
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    $sql = "SELECT id, nombre, password, telefono FROM usuarios WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (!empty($email) && !empty($password)) {
+        // Preparar consulta segura
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
+        if ($resultado->num_rows > 0) {
+            $usuario = $resultado->fetch_assoc();
 
-        // Verificar contraseña
-        if (password_verify($password, $row['password'])) {
-            // Guardar datos en sesión
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['nombre'] = $row['nombre'];
-            $_SESSION['telefono'] = $row['telefono'];
-            $_SESSION['email'] = $email;
+            // Verificar contraseña
+            if (password_verify($password, $usuario['clave'])) {
+                // Login correcto
+                $_SESSION['user_id'] = $usuario['id']; // Guardar id del usuario en sesión
+                $_SESSION['nombre'] = $usuario['nombre'];
 
-            // Redirigir al dashboard
-            header("Location: index.php?seccion=dashboard");
-            exit;
+                echo "<script>
+                    alert('✅ Bienvenido {$usuario['nombre']}');
+                    window.location.href = 'dashboard.php';
+                </script>";
+                exit();
+            } else {
+                // Contraseña incorrecta
+                echo "<script>
+                    alert('❌ Contraseña inválida');
+                    window.location.href = 'index.php';
+                </script>";
+                exit();
+            }
         } else {
-            // Contraseña inválida
-            header("Location: index.php?error=invalid_password");
-            exit;
+            // Usuario no encontrado
+            echo "<script>
+                alert('⚠️ Usuario no encontrado');
+                window.location.href = 'login.php';
+            </script>";
+            exit();
         }
     } else {
-        // Usuario no encontrado
-        header("Location: index.php?error=user_not_found");
-        exit;
+        echo "<script>
+            alert('⚠️ Debes llenar todos los campos');
+            window.location.href = 'login.php';
+        </script>";
+        exit();
     }
 }
+?>
+

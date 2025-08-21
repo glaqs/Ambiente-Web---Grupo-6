@@ -41,17 +41,6 @@ include "config.php"; // Conexión DB
         <div id="login" class="<?php echo isset($_SESSION['user_id']) ? 'hidden' : ''; ?>">
             <h2>Iniciar Sesión</h2>
 
-            <!-- Mostrar mensaje de error -->
-            <?php
-            if (isset($_GET['error'])) {
-                if ($_GET['error'] === 'invalid_password') {
-                    echo "<p style='color:red;'>Contraseña inválida</p>";
-                } elseif ($_GET['error'] === 'user_not_found') {
-                    echo "<p style='color:red;'>Usuario no encontrado</p>";
-                }
-            }
-            ?>
-
             <form action="login.php" method="POST">
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
@@ -62,13 +51,13 @@ include "config.php"; // Conexión DB
         <!-- REGISTRO -->
         <div id="registrarse">
             <h2>Registro de Usuario</h2>
+            <br>
             <div class="password-requirements">
-                <h5>Requisitos de la contraseña:</h5>
-                <ul>
-                    <h5>1. Debe contener mínimo 8 caracteres</h5>
-                    <h5>2. Al menos que una letra mayúscula</h5>
-                    <h5>3. Al menos un número</h5>
-                </ul>
+                <h3>Requisitos de la contraseña:</h3>
+                <p><small>1. Debe tener mínimo 8 caracteres.</small></p>
+                <p><small>2. Debe incluir al menos una letra mayúscula.</small></p>
+                <p><small>3. Debe incluir al menos un número.</small></p>
+                <p><small>4. Debe incluir al menos un carácter especial.</small></p>
             </div>
             <?php
 
@@ -93,7 +82,7 @@ include "config.php"; // Conexión DB
                 } else if ($_GET['registro_error'] == 2) {
                     echo 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.';
                 } else if ($_GET['registro_error'] == 3) {
-                    echo 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.';
+                    echo 'La contraseña no cumple con los requisitos.';
                 } else if ($_GET['registro_error'] == 4) {
                     echo 'Error en la base de datos. Por favor, contacta al administrador.';
                 } else {
@@ -123,7 +112,7 @@ include "config.php"; // Conexión DB
                 // Verificar que las contraseñas coincidan
                 if (password !== confirmarPassword) {
                     e.preventDefault();
-                    alert('Las contraseñas no coinciden. Por favor, verifica.');
+                    alert('Las contraseñas no coinciden. Por favor, verifique e intente de nuevo.');
                     return;
                 }
 
@@ -131,7 +120,7 @@ include "config.php"; // Conexión DB
                 const strongRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
                 if (!strongRegex.test(password)) {
                     e.preventDefault();
-                    alert('La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.');
+                    alert('La contraseña no cumple con los requisitos.');
                 }
             });
         </script>

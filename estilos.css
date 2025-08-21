@@ -248,3 +248,26 @@ table.movimientos td {
         flex-direction: column;
     }
 }
+.password-requisitos {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 400px;
+    font-family: Arial, sans-serif;
+}
+
+.password-requisitos p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.password-requisitos .numero {
+    font-weight: bold;
+    color: #2c7be5;
+    margin-right: 5px;
+}
+
+.password-requisitos strong {
+    color: #d9534f; /* Resalta los puntos importantes */
+}
