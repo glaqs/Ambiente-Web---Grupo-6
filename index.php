@@ -64,12 +64,6 @@ include "config.php"; // Conexión DB
             <h2>Registro de Usuario</h2>
             <br>
             <div class="password-requirements">
-                <h5>Requisitos de la contraseña:</h5>
-                <ul>
-                    <h5>1. Debe contener mínimo 8 caracteres</h5>
-                    <h5>2. Al menos que una letra mayúscula</h5>
-                    <h5>3. Al menos un número</h5>
-                </ul>
                 <h3>Requisitos de la contraseña:</h3>
                 <p><small>1. Debe tener mínimo 8 caracteres.</small></p>
                 <p><small>2. Debe incluir al menos una letra mayúscula.</small></p>
