@@ -21,15 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['nombre'] = $row['nombre'];
             $_SESSION['telefono'] = $row['telefono'];
-            $_SESSION['email'] = $email; // ← Guardamos el email 
+            $_SESSION['email'] = $email;
 
             // Redirigir al dashboard
             header("Location: index.php?seccion=dashboard");
             exit;
+        } else {
+            // Contraseña inválida
+            header("Location: index.php?error=invalid_password");
+            exit;
         }
+    } else {
+        // Usuario no encontrado
+        header("Location: index.php?error=user_not_found");
+        exit;
     }
-
-    // Si falla el login
-    header("Location: index.php?error=1");
-    exit;
 }

@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_param("ssss", $nombre, $email, $password_hash, $telefono);
 
     // Ejecutar y redirigir si es exitoso
+
     if ($stmt->execute()) {
         header("Location: index.php?registro=ok");
         exit;

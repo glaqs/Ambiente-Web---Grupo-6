@@ -40,6 +40,18 @@ include "config.php"; // Conexión DB
         <!-- LOGIN -->
         <div id="login" class="<?php echo isset($_SESSION['user_id']) ? 'hidden' : ''; ?>">
             <h2>Iniciar Sesión</h2>
+
+            <!-- Mostrar mensaje de error -->
+            <?php
+            if (isset($_GET['error'])) {
+                if ($_GET['error'] === 'invalid_password') {
+                    echo "<p style='color:red;'>Contraseña inválida</p>";
+                } elseif ($_GET['error'] === 'user_not_found') {
+                    echo "<p style='color:red;'>Usuario no encontrado</p>";
+                }
+            }
+            ?>
+
             <form action="login.php" method="POST">
                 <input type="email" name="email" placeholder="Correo electrónico" required>
                 <input type="password" name="password" placeholder="Contraseña" required>
@@ -48,24 +60,87 @@ include "config.php"; // Conexión DB
         </div>
 
         <!-- REGISTRO -->
-        <div id="registrarse" class="hidden">
+        <div id="registrarse">
             <h2>Registro de Usuario</h2>
-            <form action="registro.php" method="POST">
+            <div class="password-requirements">
+                <h5>Requisitos de la contraseña:</h5>
+                <ul>
+                    <h5>1. Debe contener mínimo 8 caracteres</h5>
+                    <h5>2. Al menos que una letra mayúscula</h5>
+                    <h5>3. Al menos un número</h5>
+                </ul>
+            </div>
+            <?php
+
+
+            if (isset($_GET['registro']) && $_GET['registro'] === 'ok') {
+                echo '<div class="alert alert-success" role="alert">';
+                echo '<span class="alert-icon">✅</span> ';
+                echo 'Usuario registrado satisfactoriamente. Ahora puedes iniciar sesión.';
+                echo '</div>';
+
+                // También mostrar alert en JS
+                echo '<script>alert("Usuario registrado correctamente. Ahora puedes iniciar sesión.");</script>';
+            }
+
+            // Mostrar mensajes de error
+            if (isset($_GET['registro_error'])) {
+                echo '<div class="alert alert-error">';
+                echo '<span class="alert-icon">❌</span>';
+
+                if ($_GET['registro_error'] == 1) {
+                    echo 'Este correo electrónico ya está registrado. Por favor, utiliza otro.';
+                } else if ($_GET['registro_error'] == 2) {
+                    echo 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.';
+                } else if ($_GET['registro_error'] == 3) {
+                    echo 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.';
+                } else if ($_GET['registro_error'] == 4) {
+                    echo 'Error en la base de datos. Por favor, contacta al administrador.';
+                } else {
+                    echo 'Error al registrar el usuario. Por favor, inténtalo de nuevo.';
+                }
+
+                echo '</div>';
+            }
+            ?>
+
+            <form action="registro.php" method="POST" id="registroForm">
                 <input type="text" name="nombre" placeholder="Nombre completo" required>
                 <input type="email" name="email" placeholder="Correo electrónico" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <input type="password" name="confirmar_password" placeholder="Confirmar contraseña" required>
+                <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                <input type="password" name="confirmar_password" id="confirmar_password" placeholder="Confirmar contraseña" required>
                 <input type="text" name="telefono" placeholder="Número de teléfono" required>
                 <button type="submit" name="registro">Registrarse</button>
             </form>
         </div>
+        </div>
+        <script>
+            // Validación de contraseña en el lado del cliente
+            document.getElementById('registroForm').addEventListener('submit', function(e) {
+                const password = document.getElementById('password').value;
+                const confirmarPassword = document.getElementById('confirmar_password').value;
 
+                // Verificar que las contraseñas coincidan
+                if (password !== confirmarPassword) {
+                    e.preventDefault();
+                    alert('Las contraseñas no coinciden. Por favor, verifica.');
+                    return;
+                }
+
+                // Verificar fortaleza de la contraseña (mínimo 8 caracteres, una mayúscula y un número)
+                const strongRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+                if (!strongRegex.test(password)) {
+                    e.preventDefault();
+                    alert('La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.');
+                }
+            });
+        </script>
         <?php if (isset($_SESSION['user_id'])): ?>
             <!-- DASHBOARD -->
             <div id="dashboard">
                 <br>
                 <p style="font-size: 1.5rem; font-weight: bold; text-align: center;">
-                     👋Bienvenido/a, <?php echo $_SESSION['nombre']??'Usuario'; ?>!👋
+                    👋Bienvenido/a, <?php echo $_SESSION['nombre'] ?? 'Usuario'; ?>!👋
                 </p>
 
                 <div style="position: relative; width: 100%; text-align: center; margin-top: 50px;">
@@ -89,8 +164,8 @@ include "config.php"; // Conexión DB
                             alt="Logo FINGO"
                             style="height: 300px; width: auto; transform: rotate(10deg); transform-origin: bottom left;">
                     </div>
-                </div>
 
+                </div>
                 <div style="text-align: center; margin-top: 20px;">
                     <svg width="500" height="150" viewBox="0 0 500 150">
                         <path id="curva" d="M 50 120 Q 250 20 450 120" fill="transparent" />
@@ -109,29 +184,33 @@ include "config.php"; // Conexión DB
 
             <!-- CALCULADORA DE TIPO DE CAMBIO -->
             <div id="calculadora" class="hidden">
-                <h2 style="text-align:center;">Calculadora de Tipo de Cambio</h2>
+                <h1 style="text-align:center;">Calculadora de Tipo de Cambio</h1>
 
-                <div style="max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e45fc7ff; border-radius: 8px;">
+                <div style="max-width: 550px; margin: 0 auto; padding: 20px; border: 5px solid #e45fc7ff; border-radius: 10px;">
                     <form id="form-cambio" style="margin-bottom: 20px;">
                         <div style="margin-bottom: 15px;">
                             <label for="monto" style="display: block; margin-bottom: 5px;">Monto:</label>
-                            <input type="number" id="monto" name="monto" step="0.01" min="0" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0" style="width: 50%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
                         </div>
 
                         <div style="display: flex; gap: 15px; margin-bottom: 15px;">
                             <div style="flex: 1;">
-                                <label for="moneda-origen" style="display: block; margin-bottom: 5px;">De:</label>
+                                <label for="moneda-origen" style="display: block; margin-bottom: 1px;">De:</label>
                                 <select id="moneda-origen" name="moneda_origen" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
                                     <option value="CRC">Colón Costarricense (CRC)</option>
                                     <option value="USD">Dólar Estadounidense (USD)</option>
                                     <option value="EUR">Euro (EUR)</option>
                                     <option value="GBP">Libra Esterlina (GBP)</option>
                                     <option value="MXN">Peso Mexicano (MXN)</option>
+                                    <option value="CNY">Yuan Chino (CNY)</option>
+                                    <option value="JPY">Yen Japonés (JPY)</option>
+                                    <option value="COP">Peso Colombiano (COP)</option>
+                                    <option value="VES">Bolívar Venezolano (VES)</option>
                                 </select>
                             </div>
 
-                            <div style="display: flex; align-items: center; padding-top: 22px;">
-                                <button type="button" id="intercambiar" style="background: none; border: none; cursor: pointer; font-size: 20px;">⇄</button>
+                            <div style="display: flex; align-items: center; padding-top: 25px;">
+                                <button type="button" id="intercambiar" style="background: none; border: none; cursor: pointer; font-size: 20px; color: red;">⇄</button>
                             </div>
 
                             <div style="flex: 1;">
@@ -142,6 +221,10 @@ include "config.php"; // Conexión DB
                                     <option value="EUR">Euro (EUR)</option>
                                     <option value="GBP">Libra Esterlina (GBP)</option>
                                     <option value="MXN">Peso Mexicano (MXN)</option>
+                                    <option value="CNY">Yuan Chino (CNY)</option>
+                                    <option value="JPY">Yen Japonés (JPY)</option>
+                                    <option value="COP">Peso Colombiano (COP)</option>
+                                    <option value="VES">Bolívar Venezolano (VES)</option>
                                 </select>
                             </div>
                         </div>
@@ -339,8 +422,7 @@ include "config.php"; // Conexión DB
                     <?php endif; ?>
 
                     <br>
-                    <h1 style="text-align: center; ">"CUIDA TUS GASTOS"</h1>
-
+                    <h1 style="text-align: center; ">👉"CUIDA TUS GASTOS"👈</h1>
                     <?php
                     $mensaje_alerta_web = "Hola {$_SESSION['nombre']}, este es un recordatorio de tus finanzas. Saldo actual: ₡$saldo.";
                     $mensaje_alerta_normal_wa = urlencode("Hola {$_SESSION['nombre']}, este es un recordatorio de tus finanzas. Saldo actual: ₡$saldo.");
